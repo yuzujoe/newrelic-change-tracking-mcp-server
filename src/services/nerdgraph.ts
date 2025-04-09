@@ -1,9 +1,10 @@
 import fetch from 'node-fetch';
-import { DeploymentOptions, NerdGraphResponse } from '../types/index.js';
+import {DeploymentOptions, EntitySearchResponse, NerdGraphResponse} from '../types/index.js';
 import {z} from "zod";
 
 export const NewRelicChangeTrackingCreateDeploymentSchema = z.object({
   version: z.string().describe("Version"),
+  name: z.string().describe("Name"),
   entityGuid: z.string().optional().describe("Entity GUID - defaults to mapped value or environment variable if not provided"),
   description: z.string().optional().describe("Description"),
   user: z.string().optional().describe("User"),
@@ -97,5 +98,49 @@ export class NerdGraphService {
       version,
       entityGuid
     });
+  }
+
+  /**
+   *  Search for an entity by guid
+   */
+  async entitySearch(name: string): Promise<string> {
+    const query = `
+      {
+        actor {
+          user {
+            name
+          }
+          entitySearch(
+            query: "name = '${name}' AND domainType IN ('APM-APPLICATION')"
+            options: {
+              limit: 1
+            }
+          ) {
+            results {
+              entities {
+                guid
+              }
+            }
+          }
+        }
+      }`
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'API-Key': this.apiKey
+        },
+        body: JSON.stringify({ query })
+      });
+
+      const data = await response.json() as EntitySearchResponse;
+      console.error('response guid:', data.data.actor.entitySearch.results.entities[0]?.guid);
+      return data.data.actor.entitySearch.results.entities[0]?.guid;
+    }
+    catch (e) {
+      console.error("Entity search failed:", e);
+      throw new Error(`Failed to search entity with name: ${name}, message: ${e}`);
+    }
   }
 }

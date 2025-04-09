@@ -42,15 +42,9 @@ Claude Desktop MCP を使用する場合は `claude_desktop_config.json` に以�
         "--rm",
         "-e",
         "NEW_RELIC_API_KEY",
-        "-e",
-        "ENTITY_GUID",
-        "-e",
-        "APP_NAME",
         "newrelic-change-tracking-mcp-server"
       ],
       "env": {
-        "APP_NAME": "MyApplication",
-        "ENTITY_GUID": "YOUR_ENTITY_GUID",
         "NEW_RELIC_API_KEY": "Set New Relic User Key"
       }
     }
@@ -64,5 +58,4 @@ Claude Desktop MCP を使用する場合は `claude_desktop_config.json` に以�
 
 ```text
 <アプリ名> のアプリに 1.0.0 の version でデプロイを記録してください
-user は <user名> でお願いします
 ```

@@ -44,3 +44,33 @@ export interface PromptRequest {
   changelog?: string;
   entityGuid?: string;
 }
+
+export interface EntitySearchResponse {
+  data: Data
+}
+
+export interface Data {
+  actor: Actor
+}
+
+export interface Actor {
+  entitySearch: EntitySearch
+  user: User
+}
+
+export interface EntitySearch {
+  results: Results
+}
+
+export interface Results {
+  entities: Entity[]
+}
+
+export interface Entity {
+  guid: string
+  name: string
+}
+
+export interface User {
+  name: string
+}
