@@ -1,5 +1,4 @@
 import { NerdGraphService } from './src/services/nerdgraph.js';
-import { PromptHandler } from './src/services/prompt-handler.js';
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -39,13 +38,6 @@ console.error(`Using default entity GUID: ${ENTITY_GUID || '(not set)'}`);
 
 // 必要なサービスの初期化
 const nerdGraphService = new NerdGraphService(API_KEY, NERDGRAPH_API_URL);
-const promptHandler = new PromptHandler(nerdGraphService, ENTITY_GUID);
-
-// デフォルトのアプリ名とEntityGUIDが設定されている場合、マッピングを追加
-if (APP_NAME && ENTITY_GUID) {
-  promptHandler.setEntityGuid(APP_NAME, ENTITY_GUID);
-  console.error(`Mapped app '${APP_NAME}' to entity GUID '${ENTITY_GUID}'`);
-}
 
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
