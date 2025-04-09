@@ -102,16 +102,24 @@ export class NerdGraphService {
   /**
    *  Search for an entity by guid
    */
-  async entitySearch(guid: string): Promise<EntitySearchResponse> {
+  async entitySearch(name: string): Promise<EntitySearchResponse> {
     const query = `
       {
         actor {
           user {
             name
           }
-          entity(guid: guid) {
-            guid
-            name
+          entitySearch(
+            query: "name = ${name} AND domainType IN ('APM-APPLICATION')"
+            options: {
+              limit: 1
+            }
+          ) {
+            results {
+              entities {
+                guid
+              }
+            }
           }
         }
       }`
@@ -133,7 +141,7 @@ export class NerdGraphService {
     }
     catch (e) {
       console.error("Entity search failed:", e);
-      throw new Error(`Failed to search entity with guid: ${guid}`);
+      throw new Error(`Failed to search entity with name: ${name}`);
     }
   }
 }
