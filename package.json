@@ -1,0 +1,31 @@
+{
+  "name": "mcp-server",
+  "version": "1.0.0",
+  "description": "MCP Server for New Relic Change Tracking integration",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "prepare": "npm run build",
+    "watch": "tsc --watch"
+  },
+  "keywords": [
+    "mcp",
+    "server",
+    "new-relic",
+    "change-tracking"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.8.0",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.2",
+    "zod-to-json-schema": "^3.24.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "type": "module"
+}
