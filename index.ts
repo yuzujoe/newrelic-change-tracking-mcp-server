@@ -85,7 +85,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     // パラメータの型変換とチェック
     const version = String(parameters.version || ''); // 必ず文字列に変換
-    const userParam = parameters?.user ? String(parameters.user) : undefined;
+    const userParam = parameters?.user ? String(parameters.user) : 'Claude Desktop';
     const descriptionParam = parameters?.description ? String(parameters.description) : undefined;
     const commitParam = parameters?.commit ? String(parameters.commit) : undefined;
     const changelogParam = parameters?.changelog ? String(parameters.changelog) : undefined;
