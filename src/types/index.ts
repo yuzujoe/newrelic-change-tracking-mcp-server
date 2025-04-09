@@ -44,3 +44,8 @@ export interface PromptRequest {
   changelog?: string;
   entityGuid?: string;
 }
+
+export interface EntitySearchResponse {
+  guid: string;
+  name: string;
+}

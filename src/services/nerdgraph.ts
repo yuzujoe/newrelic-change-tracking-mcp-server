@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { DeploymentOptions, NerdGraphResponse } from '../types/index.js';
+import {DeploymentOptions, EntitySearchResponse, NerdGraphResponse} from '../types/index.js';
 import {z} from "zod";
 
 export const NewRelicChangeTrackingCreateDeploymentSchema = z.object({
@@ -97,5 +97,43 @@ export class NerdGraphService {
       version,
       entityGuid
     });
+  }
+
+  /**
+   *  Search for an entity by guid
+   */
+  async entitySearch(guid: string): Promise<EntitySearchResponse> {
+    const query = `
+      {
+        actor {
+          user {
+            name
+          }
+          entity(guid: guid) {
+            guid
+            name
+          }
+        }
+      }`
+    try {
+      const response = await fetch(this.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'API-Key': this.apiKey
+        },
+        body: JSON.stringify({ query })
+      });
+
+      const data = await response.json() as EntitySearchResponse;
+      return {
+        guid: data.guid,
+        name: data.name
+      };
+    }
+    catch (e) {
+      console.error("Entity search failed:", e);
+      throw new Error(`Failed to search entity with guid: ${guid}`);
+    }
   }
 }
