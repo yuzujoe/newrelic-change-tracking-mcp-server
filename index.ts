@@ -32,10 +32,6 @@ if (!API_KEY) {
   process.exit(1);
 }
 
-// 環境変数に関する情報を表示
-console.error(`Using default app name: ${APP_NAME || '(not set)'}`);
-console.error(`Using default entity GUID: ${ENTITY_GUID || '(not set)'}`);
-
 // 必要なサービスの初期化
 const nerdGraphService = new NerdGraphService(API_KEY, NERDGRAPH_API_URL);
 
@@ -61,15 +57,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     // パラメータにアクセスする正しい方法
     const parameters = request.params?.arguments;
-
-    // パラメータまたは環境変数からアプリ名を取得
-    const appName = APP_NAME;
-    const entityGuid = ENTITY_GUID
-
-    // NerdGraphに対してデプロイメント作成リクエストを実行
-    if (!entityGuid　|| !parameters.version) {
-        return { error: `アプリ「${appName || '不明'}」の Entity Guid 又は、Version が設定されていません` };
+    if (!parameters.name || !parameters.version) {
+      return { error: `アプリ名又は Version が設定されていません ${parameters.appName} ${parameters.version}` };
     }
+    // パラメータまたは環境変数からアプリ名を取得
+    const appName = String(parameters.name);
+    const entityGuid = await nerdGraphService.entitySearch(appName)
 
     let timestamp = Date.now(); // デフォルトは現在のUNIXタイムスタンプ
     
@@ -109,7 +102,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         changelog: changelogParam
     };
 
-    console.error(`Creating deployment for app '${appName || '(not specified)'}' with entity GUID '${entityGuid}'`);
+    console.error(`Creating deployment for app '${appName || '(not specified)'}' with options:`, deploymentOptions);
 
     // NerdGraphサービスを使用してデプロイメントを作成
     const response = await nerdGraphService.createDeployment(deploymentOptions);
@@ -125,7 +118,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             ],
         };
     }
-    return { error: '必要なパラメータが不足しています。appNameまたはEnvironmentのEntityGuid、およびversionが必要です' };
+    return { error: '必要なパラメータが不足しています。appName、およびversionが必要です' };
   } catch (error) {
     console.error('Tool call error:', error);
     return { error: error instanceof Error ? error.message : '不明なエラー' };
