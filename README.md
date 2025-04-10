@@ -20,12 +20,9 @@ docker build -t newrelic-change-tracking-mcp-server .
 
 ## 使い方
 
-### 環境変数を使用したデフォルト設定
+### 必要な環境変数
 
-環境変数にデフォルトのアプリ名とエンティティGUIDを設定できます：
-
-- `APP_NAME` - デフォルトのアプリケーション名
-- `ENTITY_GUID` - デフォルトのエンティティGUID
+- `NEW_RELIC_API_KEY` - New RelicのAPIキー([USER KEY](https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/#user-key))を指定します。
 
 Claude Desktop MCP を使用する場合は `claude_desktop_config.json` に以下のように設定できます：
 
