@@ -5,6 +5,7 @@ import {z} from "zod";
 export const NewRelicChangeTrackingCreateDeploymentSchema = z.object({
   version: z.string().describe("Version"),
   name: z.string().describe("Name"),
+  domainType: z.string().optional().describe("Domain Type"),
   entityGuid: z.string().optional().describe("Entity GUID - defaults to mapped value or environment variable if not provided"),
   description: z.string().optional().describe("Description"),
   user: z.string().optional().describe("User"),
@@ -103,7 +104,11 @@ export class NerdGraphService {
   /**
    *  Search for an entity by guid
    */
-  async entitySearch(name: string): Promise<string> {
+  async entitySearch(entityName: string, domainType: string | undefined): Promise<string> {
+    const entitySearchQuery = domainType ? 
+    `name = '${entityName}' AND domainType IN ('${domainType}')` : 
+    `name = '${entityName}'`;
+
     const query = `
       {
         actor {
@@ -111,7 +116,7 @@ export class NerdGraphService {
             name
           }
           entitySearch(
-            query: "name = '${name}' AND domainType IN ('APM-APPLICATION')"
+            query: "${entitySearchQuery}"
             options: {
               limit: 1
             }

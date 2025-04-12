@@ -53,6 +53,50 @@ Claude Desktop MCP を使用する場合は `claude_desktop_config.json` に以�
 
 プロンプトを入力してアプリケーションの変更を記録します：
 
+#### 必須パラメータ
+
+以下のパラメータは必須です：
+
+- `アプリ名`: 変更を記録するアプリケーションの名前
+- `version`: デプロイするバージョン
+
 ```text
-<アプリ名> のアプリに 1.0.0 の version でデプロイを記録してください
+<アプリ名> のアプリに <version> の version でデプロイを記録してください
+```
+
+例：
+```text
+my-application のアプリに 1.0.0 の version でデプロイを記録してください
+```
+
+#### オプショナルパラメータ
+
+以下のパラメータはオプションです：
+
+- `user`: デプロイを実行したユーザー名（デフォルト: "system"）
+- `description`: デプロイの説明
+- `changelog`: 変更内容の詳細
+- `repository`: リポジトリURL
+- `commit`: コミットハッシュ
+- `domainType`: エンティティのドメインタイプ（例: "APM-APPLICATION", "BROWSER-APPLICATION", "MOBILE-APPLICATION"）
+
+```text
+<アプリ名> のアプリに <version> の version でデプロイを記録してください
+user: <ユーザー名>
+description: <説明>
+changelog: <変更内容>
+repository: <リポジトリURL>
+commit: <コミットハッシュ>
+domainType: <ドメインタイプ>
+```
+
+例：
+```text
+my-application のアプリに 1.0.0 の version でデプロイを記録してください
+user: yuzujoe
+description: Spring release update
+changelog: - Fixed login bug\n- Added new dashboard feature
+repository: リポジトリURL
+commit: コミットハッシュ
+domainType: APM-APPLICATION
 ```
