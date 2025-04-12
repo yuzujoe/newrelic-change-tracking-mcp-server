@@ -61,8 +61,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       return { error: `アプリ名又は Version が設定されていません ${parameters.appName} ${parameters.version}` };
     }
     // パラメータまたは環境変数からアプリ名を取得
-    const appName = String(parameters.name);
-    const entityGuid = await nerdGraphService.entitySearch(appName)
+    const entityName = String(parameters.name);
+    const domainTypeParam = parameters?.domainType;
+    const domainType = domainTypeParam && String(domainTypeParam).trim() !== '' 
+        ? String(domainTypeParam) 
+        : undefined;
+    const entityGuid = await nerdGraphService.entitySearch(entityName, domainType)
 
     let timestamp = Date.now(); // デフォルトは現在のUNIXタイムスタンプ
     
@@ -102,7 +106,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         changelog: changelogParam
     };
 
-    console.error(`Creating deployment for app '${appName || '(not specified)'}' with options:`, deploymentOptions);
+    console.error(`Creating deployment for entity '${entityName || '(not specified)'}' with options:`, deploymentOptions);
 
     // NerdGraphサービスを使用してデプロイメントを作成
     const response = await nerdGraphService.createDeployment(deploymentOptions);
@@ -113,12 +117,12 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             content: [
                 {
                     type: 'text',
-                    text: `✅ デプロイが正常に記録されました！\n- アプリ: ${appName}\n- バージョン: ${result.version}\n- デプロイID: ${result.deploymentId}\n- エンティティGUID: ${result.entityGuid}`
+                    text: `✅ デプロイが正常に記録されました！\n- エンティティ: ${entityName}\n- バージョン: ${result.version}\n- デプロイID: ${result.deploymentId}\n- エンティティGUID: ${result.entityGuid}`
                 }
             ],
         };
     }
-    return { error: '必要なパラメータが不足しています。appName、およびversionが必要です' };
+    return { error: '必要なパラメータが不足しています。entityName、およびversionが必要です' };
   } catch (error) {
     console.error('Tool call error:', error);
     return { error: error instanceof Error ? error.message : '不明なエラー' };
