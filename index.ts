@@ -23,8 +23,6 @@ const server = new Server(
 );
 
 const API_KEY = process.env.NEW_RELIC_API_KEY;
-const ENTITY_GUID = process.env.ENTITY_GUID;
-const APP_NAME = process.env.APP_NAME || '';
 const NERDGRAPH_API_URL = process.env.NERDGRAPH_API_URL || 'https://api.newrelic.com/graphql';
 
 if (!API_KEY) {
