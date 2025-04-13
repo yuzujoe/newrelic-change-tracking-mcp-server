@@ -21,7 +21,7 @@ Note: This repository was created as a practice implementation of an MCP server 
 |-------|------|----------|--------------------------------------------------------------------------------|
 | `version` | string | Yes | Version of the deployment                                                      |
 | `name` | string | Yes | Entity Name of the deployment                                                  |
-| `domainType` | string | No | Domain Type                                                                    |
+| `domainType` | string | No | Domain Type  (eg, APM-APPLICATION BROWSER-APPLICATION MOBILE-APPLICATION)                                                                  |
 | `entityGuid` | string | No | Entity GUID - defaults to mapped value or environment variable if not provided |
 | `description` | string | No | Description of the deployment                                                  |
 | `user` | string | No | User who initiated the deployment                                              |
