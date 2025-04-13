@@ -1,30 +1,51 @@
 # MCP Server for New Relic Change Tracking
 
-チャットベースでNew Relic Change Trackingと連携するためのMCPサーバー
+An MCP server that integrates with New Relic Change Tracking via chat interfaces.
 
-## 概要
+## Overview
 
-このツールは、New Relicの変更追跡（Change Tracking）をチャットベースで簡単に記録・連携するためのサーバーです。
-Model Context Protocol (MCP)を使用して、LLMからの直接リクエストをサポートし、アプリケーションのデプロイイベントなどを簡単に記録できます。
+This tool is a server that makes it easy to record and integrate New Relic Change Tracking events through chat-based interfaces.
+It uses the Model Context Protocol (MCP) to support direct requests from LLMs, making it simple to record application deployment events and other changes.
 
-※MCPサーバーの実装練習のために作成したリポジトリになるので本番での利用などには向いていません。
+Note: This repository was created as a practice implementation of an MCP server and is not recommended for production use.
 
-## セットアップ
+## Tools
 
-### docker build
+### `newrelic_change_tracking_create_deployment`
+
+- Records deployments for the specified entity
+
+#### inputs
+
+| Field | Type | Required | Description                                                                    |
+|-------|------|----------|--------------------------------------------------------------------------------|
+| `version` | string | Yes | Version of the deployment                                                      |
+| `name` | string | Yes | Entity Name of the deployment                                                  |
+| `domainType` | string | No | Domain Type                                                                    |
+| `entityGuid` | string | No | Entity GUID - defaults to mapped value or environment variable if not provided |
+| `description` | string | No | Description of the deployment                                                  |
+| `user` | string | No | User who initiated the deployment                                              |
+| `commit` | string | No | Commit hash or identifier                                                      |
+| `changelog` | string | No | Changelog details                                                              |
+| `timestamp` | number \| string | No | Timestamp - defaults to current time                                           |
+
+
+## Setup
+
+### Docker Build
 
 ```shell
-# イメージのビルド
+# Build the image
 docker build -t newrelic-change-tracking-mcp-server .
 ```
 
-## 使い方
+## Usage
 
-### 必要な環境変数
+### Required Environment Variables
 
-- `NEW_RELIC_API_KEY` - New RelicのAPIキー([USER KEY](https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/#user-key))を指定します。
+- `NEW_RELIC_API_KEY` - Specify your New Relic API key ([USER KEY](https://docs.newrelic.com/docs/apis/intro-apis/new-relic-api-keys/#user-key)).
 
-Claude Desktop MCP を使用する場合は `claude_desktop_config.json` に以下のように設定できます：
+For Claude Desktop MCP users, you can configure `claude_desktop_config.json` as follows:
 
 ### Docker
 
@@ -49,54 +70,41 @@ Claude Desktop MCP を使用する場合は `claude_desktop_config.json` に以�
 }
 ```
 
-### 使用方法
+### How to Use
 
-プロンプトを入力してアプリケーションの変更を記録します：
+Enter a prompt to record entity change tracking request:
 
-#### 必須パラメータ
+#### Required Parameters
 
-以下のパラメータは必須です：
-
-- `アプリ名`: 変更を記録するアプリケーションの名前
-- `version`: デプロイするバージョン
 
 ```text
-<アプリ名> のアプリに <version> の version でデプロイを記録してください
+Record a deployment for <entity name> with <version>
 ```
 
-例：
+Example:
 ```text
-my-application のアプリに 1.0.0 の version でデプロイを記録してください
+Record a deployment for my-application with version 1.0.0
 ```
 
-#### オプショナルパラメータ
-
-以下のパラメータはオプションです：
-
-- `user`: デプロイを実行したユーザー名（デフォルト: "system"）
-- `description`: デプロイの説明
-- `changelog`: 変更内容の詳細
-- `repository`: リポジトリURL
-- `commit`: コミットハッシュ
-- `domainType`: エンティティのドメインタイプ（例: "APM-APPLICATION", "BROWSER-APPLICATION", "MOBILE-APPLICATION"）
+#### Optional Parameters
 
 ```text
-<アプリ名> のアプリに <version> の version でデプロイを記録してください
-user: <ユーザー名>
-description: <説明>
-changelog: <変更内容>
-repository: <リポジトリURL>
-commit: <コミットハッシュ>
-domainType: <ドメインタイプ>
+Record a deployment for <entity name> with <version>
+user: <username>
+description: <description>
+changelog: <changelog>
+repository: <repository URL>
+commit: <commit hash>
+domainType: <domain type>
 ```
 
-例：
+Example:
 ```text
-my-application のアプリに 1.0.0 の version でデプロイを記録してください
+Record a deployment for application my-application with version 1.0.0
 user: yuzujoe
 description: Spring release update
 changelog: - Fixed login bug\n- Added new dashboard feature
-repository: リポジトリURL
-commit: コミットハッシュ
+repository: repository URL
+commit: commit hash
 domainType: APM-APPLICATION
 ```
