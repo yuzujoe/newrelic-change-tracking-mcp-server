@@ -9,6 +9,27 @@ It uses the Model Context Protocol (MCP) to support direct requests from LLMs, m
 
 Note: This repository was created as a practice implementation of an MCP server and is not recommended for production use.
 
+## Tools
+
+### `newrelic_change_tracking_create_deployment`
+
+- Records deployments for the specified entity
+
+#### inputs
+
+| Field | Type | Required | Description                                                                    |
+|-------|------|----------|--------------------------------------------------------------------------------|
+| `version` | string | Yes | Version of the deployment                                                      |
+| `name` | string | Yes | Entity Name of the deployment                                                  |
+| `domainType` | string | No | Domain Type                                                                    |
+| `entityGuid` | string | No | Entity GUID - defaults to mapped value or environment variable if not provided |
+| `description` | string | No | Description of the deployment                                                  |
+| `user` | string | No | User who initiated the deployment                                              |
+| `commit` | string | No | Commit hash or identifier                                                      |
+| `changelog` | string | No | Changelog details                                                              |
+| `timestamp` | number \| string | No | Timestamp - defaults to current time                                           |
+
+
 ## Setup
 
 ### Docker Build
@@ -55,10 +76,6 @@ Enter a prompt to record application changes:
 
 #### Required Parameters
 
-The following parameters are required:
-
-- `Application name`: The name of the application for which to record changes
-- `version`: The version being deployed
 
 ```text
 Record a deployment for application <application name> with version <version>
@@ -70,15 +87,6 @@ Record a deployment for application my-application with version 1.0.0
 ```
 
 #### Optional Parameters
-
-The following parameters are optional:
-
-- `user`: The username of the person executing the deployment (default: "system")
-- `description`: A description of the deployment
-- `changelog`: Detailed information about the changes
-- `repository`: Repository URL
-- `commit`: Commit hash
-- `domainType`: Entity domain type (e.g., "APM-APPLICATION", "BROWSER-APPLICATION", "MOBILE-APPLICATION")
 
 ```text
 Record a deployment for application <application name> with version <version>
