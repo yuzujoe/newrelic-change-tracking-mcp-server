@@ -72,24 +72,24 @@ For Claude Desktop MCP users, you can configure `claude_desktop_config.json` as 
 
 ### How to Use
 
-Enter a prompt to record application changes:
+Enter a prompt to record entity change tracking request:
 
 #### Required Parameters
 
 
 ```text
-Record a deployment for application <application name> with version <version>
+Record a deployment for <entity name> with <version>
 ```
 
 Example:
 ```text
-Record a deployment for application my-application with version 1.0.0
+Record a deployment for my-application with version 1.0.0
 ```
 
 #### Optional Parameters
 
 ```text
-Record a deployment for application <application name> with version <version>
+Record a deployment for <entity name> with <version>
 user: <username>
 description: <description>
 changelog: <changelog>
